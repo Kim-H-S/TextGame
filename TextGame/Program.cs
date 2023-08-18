@@ -4,17 +4,24 @@
     {
         static void Main(string[] args)
         {
-            bool gameOver = false;
+            int input = 0;
 
-            int input;
-
-            while (!gameOver)
+            switch(input)
             {
-                
+                case 0:
+                    StartMenu();
+                    break;
 
-                StartMenu();
+                case 1:
+                    
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
             }
-
 
 
             void StartMenu()
@@ -32,6 +39,19 @@
                 input = int.Parse(Console.ReadLine());
             }
 
+            
+
+        }
+
+        struct Player
+        {
+            public int level;
+            public string name;
+            public string classType;
+            public float attack;
+            public float defense;
+            public float health;
+            public long gold;
         }
     }
 }
