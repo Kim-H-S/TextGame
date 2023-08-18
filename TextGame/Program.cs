@@ -6,22 +6,14 @@
         {
             int input = 0;
 
-            switch(input)
+            while (true)
             {
-                case 0:
-                    StartMenu();
-                    break;
+                Player player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
 
-                case 1:
-                    
-                    break;
-
-                case 2:
-                    break;
-
-                case 3:
-                    break;
+                StartMenu();
             }
+
+            
 
 
             void StartMenu()
@@ -40,19 +32,12 @@
             }
 
             
-
+            
         }
 
-        struct Player
-        {
-            public int level;
-            public string name;
-            public string classType;
-            public float attack;
-            public float defense;
-            public float health;
-            public long gold;
-        }
+        
+
+
     }
 }
 
