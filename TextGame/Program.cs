@@ -4,14 +4,17 @@
     {
         static void Main(string[] args)
         {
-            int input = 0;
+            Player player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
 
-            while (true)
-            {
-                Player player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
+            player.DisplayInfo();
 
-                StartMenu();
-            }
+            //int input = 0;
+
+            //while (true)
+            //{
+
+            //    StartMenu();
+            //}
 
             
 
@@ -28,7 +31,7 @@
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
-                input = int.Parse(Console.ReadLine());
+                //input = int.Parse(Console.ReadLine());
             }
 
             
