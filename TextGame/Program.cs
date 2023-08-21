@@ -54,7 +54,7 @@ namespace TextGame
                     break;
 
                 case 2:
-
+                    DisplayInventory();
                     break;
 
             }
@@ -89,6 +89,38 @@ namespace TextGame
             }
         }
 
+        static void DisplayInventory()
+        {
+            Console.Clear();
+
+            Console.WriteLine("인벤토리");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
+            Console.WriteLine("- [E]아이템명 | 능력치 +@ | 아이템설명 가나다라마바사.");
+            // 반복문을 돌면서 (isBuy == true) 구매한 것인지 확인한다.
+            //foreach(var v in )
+            Console.WriteLine();
+            Console.WriteLine("1. 장착 관리");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            int input = CheckValidInput(0, 1);
+            switch (input) 
+            {
+                case 0:
+                    DisplayGameIntro();
+                    break;
+
+                case 1:
+
+                    break;
+            }
+
+        }
+
 
         static int CheckValidInput(int min, int max)
         {
@@ -113,7 +145,7 @@ namespace TextGame
     }
 
 
-    class Player
+    public class Player
     {
         public int level { get; set; }
         public string name { get; set; }
@@ -151,7 +183,7 @@ namespace TextGame
         public long gold;
 
         // 구입 유무
-        public bool isBuy;
+        public bool bBuy;
         // 장착 유무
         public bool isEquip;
 
@@ -163,7 +195,7 @@ namespace TextGame
             this.defense = defense;
             this.health = health;
             this.gold = gold;
-            this.isBuy = isBuy;
+            this.bBuy = isBuy;
             this.isEquip = isEquip;
         }
     }
