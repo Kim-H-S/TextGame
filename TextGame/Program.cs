@@ -1,4 +1,7 @@
-﻿namespace TextGame
+﻿using System.Reflection.Emit;
+using System.Xml.Linq;
+
+namespace TextGame
 {
     internal class Program
     {
@@ -6,17 +9,19 @@
 
         static void Main(string[] args)
         {
-            player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
+            StartGameDataSetting();
 
             DisplayGameIntro();
 
 
+        }
 
+        static void StartGameDataSetting()
+        {
+            // 캐릭터 정보 셋팅
+            player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
 
-
-
-
-
+            // 아이템 정보 셋팅
         }
 
         static void DisplayGameIntro()
@@ -36,7 +41,7 @@
             switch (input)
             {
                 case 1:
-                    player.DisplayInfo();
+                    DisplayPlayerInfo();
                     break;
 
                 case 2:
@@ -45,6 +50,34 @@
 
             }
 
+        }
+
+        static void DisplayPlayerInfo()
+        {
+            Console.Clear();
+
+            Console.WriteLine("상태 보기");
+            Console.WriteLine("캐릭터의 정보가 표시됩니다.");
+            Console.WriteLine();
+            Console.WriteLine($"Lv. {player.level}");
+            Console.WriteLine($"{player.name} ( {player.classType} )");
+            Console.WriteLine($"공격력 : {player.attack}");
+            Console.WriteLine($"방어력 : {player.defense}");
+            Console.WriteLine($"체력 : {player.health}");
+            Console.WriteLine($"Gold : {player.gold} G");
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            int input = CheckValidInput(0, 0);
+            switch(input) 
+            {
+                case 0:
+                    DisplayGameIntro();
+                    break;
+            }
         }
 
 
@@ -92,28 +125,7 @@
             this.gold = gold;
         }
 
-        public void DisplayInfo()
-        {
-            Console.Clear();
-
-            Console.WriteLine("상태 보기");
-            Console.WriteLine("캐릭터의 정보가 표시됩니다.");
-            Console.WriteLine();
-            Console.WriteLine($"Lv. {level}");
-            Console.WriteLine($"{name} ( {classType} )");
-            Console.WriteLine($"공격력 : {attack}");
-            Console.WriteLine($"방어력 : {defense}");
-            Console.WriteLine($"체력 : {health}");
-            Console.WriteLine($"Gold : {gold} G");
-            Console.WriteLine();
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-            Console.Write(">> ");
-            Console.ReadLine();
-
-
-        }
+        
     }
 
 
