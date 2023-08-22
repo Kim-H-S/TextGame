@@ -394,9 +394,6 @@ namespace TextGame
 
             foreach (var item in itemNameLongSort_AND_bBuyTrue_List)
             {
-                if (!item.bBuy)
-                    return;
-
                 Console.Write("- ");
                 Console.Write($"{itemCount} ");
 
