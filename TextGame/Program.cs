@@ -233,9 +233,12 @@ namespace TextGame
 
         public void DisplayInventory()
         {
-            // 반복문을 돌면서 (isBuy == true) 구매한 것인지 확인한다.
             foreach (var item in items)
             {
+                Console.Write("- ");
+
+                if (item.isEquip) { Console.Write("[E]"); }
+
                 Console.Write($"{item.name} | ");
 
                 if (item.attack > 0) { Console.Write($"공격력 +{item.attack} "); }
