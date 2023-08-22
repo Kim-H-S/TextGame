@@ -107,7 +107,9 @@ namespace TextGame
         {
             Console.Clear();
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("상태 보기");
+            Console.ResetColor();
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
 
@@ -157,7 +159,9 @@ namespace TextGame
         {
             Console.Clear();
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("인벤토리");
+            Console.ResetColor();
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
@@ -189,7 +193,9 @@ namespace TextGame
         {
             Console.Clear();
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("인벤토리 - 장착 관리");
+            Console.ResetColor();
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
