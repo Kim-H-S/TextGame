@@ -11,6 +11,8 @@ namespace TextGame
 {
     internal class Program
     {
+        //static int totalWidth = 50; // 출력할 전체 너비
+
         static Player player;
 
         static string directoryPath = @"C:\Workspace\TextGame\GameData";
@@ -73,6 +75,8 @@ namespace TextGame
             inventory.Add(SpartanArmor);
             Item SpartanSpear = new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7, 0, 0, 5000);
             inventory.Add(SpartanSpear);
+
+
         }
 
         static void DisplayGameIntro()
@@ -361,7 +365,10 @@ namespace TextGame
 
         public void Display()
         {
-            foreach (var item in itemList)
+            List<Item> itemNameSortList = itemList.OrderBy(x => x.name).ToList();
+
+            foreach (var item in itemNameSortList)
+            //foreach (var item in itemList)
             {
                 Console.Write("- ");
 
@@ -379,10 +386,12 @@ namespace TextGame
 
         public void ManageEquippedItems()
         {
+            List<Item> itemNameSortList = itemList.OrderBy(x => x.name).ToList();
 
             int itemCount = 1;
 
-            foreach (var item in itemList)
+            foreach (var item in itemNameSortList)
+            //foreach (var item in itemList)
             {
                 if (!item.bBuy)
                     return;
