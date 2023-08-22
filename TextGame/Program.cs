@@ -241,26 +241,26 @@ namespace TextGame
 
     public class Inventory
     {
-        public List<Item> items;
+        public List<Item> itemList;
 
         public Inventory()
         {
-            items = new List<Item>();    
+            itemList = new List<Item>();    
         }
 
         public void Add(Item item) 
         {
-            items.Add(item);
+            itemList.Add(item);
         }
 
         public void RemoveItem(Item item) 
         {
-            items.Remove(item);
+            itemList.Remove(item);
         }
 
         public void DisplayInventory()
         {
-            foreach (var item in items)
+            foreach (var item in itemList)
             {
                 Console.Write("- ");
 
@@ -279,7 +279,7 @@ namespace TextGame
         public void ManageEquippedItems()
         {
 
-            foreach (var item in items)
+            foreach (var item in itemList)
             {
                 Console.Write("- ");
 
