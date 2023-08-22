@@ -365,10 +365,9 @@ namespace TextGame
 
         public void Display()
         {
-            List<Item> itemNameSortList = itemList.OrderBy(x => x.name).ToList();
+            List<Item> itemNameLongSortList = itemList.OrderByDescending(x => x.name.Length).ToList();
 
-            foreach (var item in itemNameSortList)
-            //foreach (var item in itemList)
+            foreach (var item in itemNameLongSortList)
             {
                 Console.Write("- ");
 
@@ -386,12 +385,14 @@ namespace TextGame
 
         public void ManageEquippedItems()
         {
-            List<Item> itemNameSortList = itemList.OrderBy(x => x.name).ToList();
+            List<Item> itemNameLongSort_AND_bBuyTrue_List = itemList
+    .Where(item => item.bBuy) // bBuy가 true인 아이템만 필터링
+    .OrderByDescending(x => x.name.Length) // 이름 길이로 내림차순 정렬
+    .ToList();
 
             int itemCount = 1;
 
-            foreach (var item in itemNameSortList)
-            //foreach (var item in itemList)
+            foreach (var item in itemNameLongSort_AND_bBuyTrue_List)
             {
                 if (!item.bBuy)
                     return;
