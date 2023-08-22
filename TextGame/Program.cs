@@ -9,22 +9,13 @@ using System.IO;
 
 namespace TextGame
 {
-    [Flags]
-    enum EquipmentFlags
-    {
-        None = 0,
-        Weapon = 1,
-        Armor = 2,
-        Helmet = 4,
-        Shield = 8,
-        Accessory = 16,
-    }
+    
+
+    
 
     internal class Program
     {
-        // 장비 플래그
-        static EquipmentFlags equipment;
-
+       
         //static int totalWidth = 50; // 출력할 전체 너비
 
         static Player player;
@@ -72,9 +63,6 @@ namespace TextGame
             inventory.Add(IronArmor);
             Item WornSword = new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 0, 450, true, true);
             inventory.Add(WornSword);
-
-            equipment = EquipmentFlags.Weapon | EquipmentFlags.Armor;
-            Console.WriteLine($"Equipment Flags: {equipment}");
 
             UpdatePlayerInfo();
 
@@ -240,6 +228,10 @@ namespace TextGame
                 default:
                     Item result = inventory.itemList[input - 1];
                     result.bEquip = !(result.bEquip);
+
+                    //equipment ^= EquipmentFlags.Weapon;
+                    //if ( (equipment & EquipmentFlags.Weapon) != 0 ) Console.WriteLine("Weapon is equipped");
+                    //else Console.WriteLine("Weapon is not equipped");
 
                     UpdatePlayerInfo();
 
@@ -522,6 +514,8 @@ namespace TextGame
         public bool bBuy;
         // 장착 유무
         public bool bEquip;
+
+        
 
         public Item(string name, string description, int attack, int defense, int health, long gold, bool isBuy = false, bool isEquip = false)
         {
