@@ -109,7 +109,6 @@ namespace TextGame
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
-            Console.WriteLine("- [E]아이템명 | 능력치 +@ | 아이템설명 가나다라마바사.");
 
             inventory.DisplayInventory();
 
@@ -143,7 +142,7 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
-            //
+            inventory.ManageEquippedItems();
 
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -151,13 +150,14 @@ namespace TextGame
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
 
-            int input = CheckValidInput(0, 1);
-            switch (input)
-            {
-                case 0:
-                    DisplayInventory();
-                    break;
-            }
+            int input = CheckValidInput(0, inventory.itemList.Count);
+            
+            //switch (input)
+            //{
+            //    case 0:
+            //        DisplayInventory();
+            //        break;
+            //}
         }
 
 
@@ -279,9 +279,12 @@ namespace TextGame
         public void ManageEquippedItems()
         {
 
+            int itemCount = 1;
+
             foreach (var item in itemList)
             {
                 Console.Write("- ");
+                Console.Write($"{itemCount} ");
 
                 if (item.isEquip) { Console.Write("[E]"); }
 
@@ -292,6 +295,8 @@ namespace TextGame
                 if (item.health > 0) { Console.Write($"체력 +{item.health} "); }
 
                 Console.WriteLine($" | {item.description}");
+
+                itemCount++;
             }
 
         }
