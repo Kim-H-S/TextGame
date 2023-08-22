@@ -152,8 +152,20 @@ namespace TextGame
 
             int input = CheckValidInput(0, inventory.itemList.Count);
 
-            // 1부터 접근하면 -1을 하여 0부터 접근
-            var result = inventory.itemList[input - 1];
+            switch (input)
+            {
+                case 0:
+                    DisplayInventory();
+                    break;
+
+                default:
+                    Item result = inventory.itemList[input - 1];
+                    result.bEquip = !(result.bEquip);
+
+                    ManageEquippedItems();
+                    break;
+            }
+
         }
 
 
@@ -279,6 +291,9 @@ namespace TextGame
 
             foreach (var item in itemList)
             {
+                if (!item.bBuy)
+                    return;
+
                 Console.Write("- ");
                 Console.Write($"{itemCount} ");
 
