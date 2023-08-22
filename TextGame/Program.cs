@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Reflection.Emit;
 using System.Xml.Linq;
@@ -8,14 +10,17 @@ namespace TextGame
     internal class Program
     {
         static Player player;
+        //static LinkedList<Item> items = new LinkedList<Item>();
+        static Inventory inventory = new Inventory();
 
         static void Main(string[] args)
         {
-            StartGameDataSetting();
+            
 
+            StartGameDataSetting();
             DisplayGameIntro();
 
-
+            
         }
 
         static void StartGameDataSetting()
@@ -23,14 +28,20 @@ namespace TextGame
             // 캐릭터 정보 셋팅
             player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
 
-            // 아이템 정보 셋팅
+            // 리스트로 아이템 정보 셋팅
             Item IronArmor = new Item("무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 0, 0, true, true);
+            inventory.Add(IronArmor);
             Item WornSword = new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 0, 0, true, true);
+            inventory.Add(WornSword);
 
-            Item TraineeArmor = new Item("수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 0, 5, 0, 1000, false, false);
-            Item SpartanArmor = new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 0, 15, 0, 3500, false, false);
-            Item BronzeAxe = new Item("청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 5, 0, 0, 1500, false, false);
-            Item SpartanSpear = new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7, 0, 0, 10, false, false);
+            Item TraineeArmor = new Item("수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 0, 5, 0, 1000);
+            inventory.Add(TraineeArmor);
+            Item SpartanArmor = new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 0, 15, 0, 3500);
+            inventory.Add(SpartanArmor);
+            Item BronzeAxe = new Item("청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 5, 0, 0, 1500);
+            inventory.Add(BronzeAxe);
+            Item SpartanSpear = new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7, 0, 0, 10);
+            inventory.Add(SpartanSpear);
         }
 
         static void DisplayGameIntro()
@@ -98,8 +109,9 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             Console.WriteLine("- [E]아이템명 | 능력치 +@ | 아이템설명 가나다라마바사.");
-            // 반복문을 돌면서 (isBuy == true) 구매한 것인지 확인한다.
-            //foreach(var v in )
+
+            inventory.DisplayInventory();
+
             Console.WriteLine();
             Console.WriteLine("1. 장착 관리");
             Console.WriteLine("0. 나가기");
@@ -108,7 +120,7 @@ namespace TextGame
             Console.Write(">> ");
 
             int input = CheckValidInput(0, 1);
-            switch (input) 
+            switch (input)
             {
                 case 0:
                     DisplayGameIntro();
@@ -122,7 +134,7 @@ namespace TextGame
         }
 
 
-        static int CheckValidInput(int min, int max)
+        static public int CheckValidInput(int min, int max)
         {
 
             while (true)
@@ -187,7 +199,7 @@ namespace TextGame
         // 장착 유무
         public bool isEquip;
 
-        public Item(string name, string description, int attack, int defense, int health, long gold, bool isBuy, bool isEquip)
+        public Item(string name, string description, int attack, int defense, int health, long gold, bool isBuy = false, bool isEquip = false)
         {
             this.name = name;
             this.description = description;
@@ -199,5 +211,44 @@ namespace TextGame
             this.isEquip = isEquip;
         }
     }
+
+    public class Inventory
+    {
+        public LinkedList<Item> items;
+
+        public Inventory()
+        {
+            items = new LinkedList<Item>();    
+        }
+
+        public void Add(Item item) 
+        {
+            items.AddLast(item);
+        }
+
+        public void RemoveItem(Item item) 
+        {
+            items.Remove(item);
+        }
+
+        public void DisplayInventory()
+        {
+            // 반복문을 돌면서 (isBuy == true) 구매한 것인지 확인한다.
+            foreach (var item in items)
+            {
+                Console.Write($"{item.name} | ");
+
+                if (item.attack > 0) { Console.Write($"공격력 +{item.attack} "); }
+                if (item.defense > 0) { Console.Write($"방어력 +{item.defense} "); }
+                if (item.health > 0) { Console.Write($"체력 +{item.health} "); }
+
+                Console.WriteLine($" | {item.description}");
+            }
+        }
+
+
+
+    }
+
 }
 
