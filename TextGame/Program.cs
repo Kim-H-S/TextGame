@@ -10,7 +10,6 @@ namespace TextGame
     internal class Program
     {
         static Player player;
-        //static LinkedList<Item> items = new LinkedList<Item>();
         static Inventory inventory = new Inventory();
 
         static void Main(string[] args)
@@ -100,6 +99,8 @@ namespace TextGame
             }
         }
 
+        
+
         static void DisplayInventory()
         {
             Console.Clear();
@@ -127,10 +128,36 @@ namespace TextGame
                     break;
 
                 case 1:
-
+                    ManageEquippedItems();
                     break;
             }
 
+        }
+
+        static void ManageEquippedItems()
+        {
+            Console.Clear();
+
+            Console.WriteLine("인벤토리 - 장착 관리");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
+
+            //
+
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            int input = CheckValidInput(0, 1);
+            switch (input)
+            {
+                case 0:
+                    DisplayInventory();
+                    break;
+            }
         }
 
 
@@ -214,16 +241,16 @@ namespace TextGame
 
     public class Inventory
     {
-        public LinkedList<Item> items;
+        public List<Item> items;
 
         public Inventory()
         {
-            items = new LinkedList<Item>();    
+            items = new List<Item>();    
         }
 
         public void Add(Item item) 
         {
-            items.AddLast(item);
+            items.Add(item);
         }
 
         public void RemoveItem(Item item) 
@@ -249,7 +276,25 @@ namespace TextGame
             }
         }
 
+        public void ManageEquippedItems()
+        {
 
+            foreach (var item in items)
+            {
+                Console.Write("- ");
+
+                if (item.isEquip) { Console.Write("[E]"); }
+
+                Console.Write($"{item.name} | ");
+
+                if (item.attack > 0) { Console.Write($"공격력 +{item.attack} "); }
+                if (item.defense > 0) { Console.Write($"방어력 +{item.defense} "); }
+                if (item.health > 0) { Console.Write($"체력 +{item.health} "); }
+
+                Console.WriteLine($" | {item.description}");
+            }
+
+        }
 
     }
 
