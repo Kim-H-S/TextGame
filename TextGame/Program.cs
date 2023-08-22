@@ -33,6 +33,8 @@ namespace TextGame
             Item WornSword = new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 0, 0, true, true);
             inventory.Add(WornSword);
 
+            UpdatePlayerInfo();
+
             Item TraineeArmor = new Item("수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 0, 5, 0, 1000);
             inventory.Add(TraineeArmor);
             Item SpartanArmor = new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 0, 15, 0, 3500);
@@ -78,12 +80,11 @@ namespace TextGame
             Console.WriteLine("상태 보기");
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
-            Console.WriteLine($"Lv. {player.level}");
-            Console.WriteLine($"{player.name} ( {player.classType} )");
-            Console.WriteLine($"공격력 : {player.attack}");
-            Console.WriteLine($"방어력 : {player.defense}");
-            Console.WriteLine($"체력 : {player.health}");
-            Console.WriteLine($"Gold : {player.gold} G");
+
+            //
+            player.DisplayInfo();
+            //
+
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
             Console.WriteLine();
@@ -99,7 +100,20 @@ namespace TextGame
             }
         }
 
-        
+        static void UpdatePlayerInfo()
+        {
+
+            foreach (Item item in inventory.itemList)
+            {
+                if (!item.bEquip)
+                    return;
+
+                if(item.attack != 0) { player.attack += item.attack; }
+                if(item.defense != 0) { player.defense += item.defense; }
+                if(item.health != 0) { player.health += item.health; }
+            }
+
+        }
 
         static void DisplayInventory()
         {
@@ -110,7 +124,7 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
-            inventory.DisplayInventory();
+            inventory.Display();
 
             Console.WriteLine();
             Console.WriteLine("1. 장착 관리");
@@ -163,6 +177,8 @@ namespace TextGame
                     result.bEquip = !(result.bEquip);
 
                     ManageEquippedItems();
+
+                    UpdatePlayerInfo();
                     break;
             }
 
@@ -213,7 +229,15 @@ namespace TextGame
             this.gold = gold;
         }
 
-        
+        public void DisplayInfo()
+        {
+            Console.WriteLine($"Lv. {level}");
+            Console.WriteLine($"{name} ( {classType} )");
+            Console.WriteLine($"공격력 : {attack}");
+            Console.WriteLine($"방어력 : {defense}");
+            Console.WriteLine($"체력 : {health}");
+            Console.WriteLine($"Gold : {gold} G");
+        }
 
 
     }
@@ -266,7 +290,7 @@ namespace TextGame
             itemList.Remove(item);
         }
 
-        public void DisplayInventory()
+        public void Display()
         {
             foreach (var item in itemList)
             {
