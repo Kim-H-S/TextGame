@@ -9,8 +9,22 @@ using System.IO;
 
 namespace TextGame
 {
+    [Flags]
+    enum EquipmentFlags
+    {
+        None = 0,
+        Weapon = 1,
+        Armor = 2,
+        Helmet = 4,
+        Shield = 8,
+        Accessory = 16,
+    }
+
     internal class Program
     {
+        // 장비 플래그
+        static EquipmentFlags equipment;
+
         //static int totalWidth = 50; // 출력할 전체 너비
 
         static Player player;
@@ -52,16 +66,15 @@ namespace TextGame
             // 캐릭터 정보 셋팅
             player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
             //
-            
-
-
-            
 
             // 리스트로 아이템 정보 셋팅
             Item IronArmor = new Item("무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 0, 1800, true, true);
             inventory.Add(IronArmor);
             Item WornSword = new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 0, 450, true, true);
             inventory.Add(WornSword);
+
+            equipment = EquipmentFlags.Weapon | EquipmentFlags.Armor;
+            Console.WriteLine($"Equipment Flags: {equipment}");
 
             UpdatePlayerInfo();
 
@@ -191,13 +204,13 @@ namespace TextGame
                     break;
 
                 case 1:
-                    ManageEquippedItems();
+                    DIsplayEquippedInventory();
                     break;
             }
 
         }
 
-        static void ManageEquippedItems()
+        static void DIsplayEquippedInventory()
         {
             Console.Clear();
 
@@ -208,7 +221,7 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
-            inventory.ManageEquippedItems();
+            inventory.DIsplayEquippedInventory();
 
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -230,7 +243,7 @@ namespace TextGame
 
                     UpdatePlayerInfo();
 
-                    ManageEquippedItems();
+                    DIsplayEquippedInventory();
                     break;
             }
 
@@ -564,7 +577,7 @@ namespace TextGame
 
         
         
-        public void ManageEquippedItems()
+        public void DIsplayEquippedInventory()
         {
             List<Item> itemNameLongSort_AND_bBuyTrue_List = itemList
     .Where(item => item.bBuy) // bBuy가 true인 아이템만 필터링
