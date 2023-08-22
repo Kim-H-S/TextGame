@@ -88,11 +88,12 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
+            Console.WriteLine("3. 상점");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
 
-            int input = CheckValidInput(1, 2);
+            int input = CheckValidInput(1, 3);
             switch (input)
             {
                 case 1:
@@ -103,6 +104,9 @@ namespace TextGame
                     DisplayInventory();
                     break;
 
+                case 3:
+                    Shop();
+                    break;
             }
 
         }
@@ -191,6 +195,42 @@ namespace TextGame
                     break;
             }
 
+        }
+
+        static void Shop()
+        {
+            Console.Clear();
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("상점");
+            Console.ResetColor();
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+
+            Console.WriteLine($"{player.gold} G");
+
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
+            Console.WriteLine();
+
+            inventory.DisplayShop();
+
+            Console.WriteLine();
+            Console.WriteLine("1. 아이템 구매");
+            Console.WriteLine("0. 나가기");
+            
+            int input = CheckValidInput(0, 1);
+            switch (input)
+            {
+                case 0:
+                    DisplayGameIntro();
+                    break;
+
+                case 1:
+                    
+                    break;
+            }
         }
 
         static void ManageEquippedItems()
@@ -380,6 +420,28 @@ namespace TextGame
                 if (item.health > 0) { Console.Write($"체력 +{item.health} "); }
 
                 Console.WriteLine($" | {item.description}");
+            }
+        }
+
+        public void DisplayShop()
+        {
+           
+            foreach (var item in itemList)
+            {
+                Console.Write("- ");
+
+                //if (item.bEquip) { Console.Write("[E]"); }
+
+                Console.Write($"{item.name} | ");
+
+                if (item.attack > 0) { Console.Write($"공격력 +{item.attack} "); }
+                if (item.defense > 0) { Console.Write($"방어력 +{item.defense} "); }
+                if (item.health > 0) { Console.Write($"체력 +{item.health} "); }
+
+                Console.Write($" | {item.description}");
+
+                if (item.bBuy) { Console.WriteLine($" | 구매완료"); }
+                else { Console.WriteLine($" | {item.gold} G"); }
             }
         }
 
