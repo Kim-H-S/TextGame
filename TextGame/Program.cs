@@ -1,22 +1,45 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection.Emit;
 using System.Xml.Linq;
+using System.IO;
 
 namespace TextGame
 {
     internal class Program
     {
         static Player player;
+
+        static string directoryPath = @"C:\Workspace\TextGame\GameData";
+        static string fileName = "player.txt";
+        static string filePath = Path.Combine(directoryPath, fileName);
+
+
         static Inventory inventory = new Inventory();
 
         static void Main(string[] args)
         {
+            StartGameDataSetting();
+
+            //
+
             
 
-            StartGameDataSetting();
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            player.SaveToFile(filePath);
+
+            player.LoadFromFile(filePath, player);
+
+            //
+
+
             DisplayGameIntro();
 
             
@@ -26,6 +49,11 @@ namespace TextGame
         {
             // 캐릭터 정보 셋팅
             player = new Player(1, "Chad", "전사", 10, 5, 100, 1500);
+            //
+            
+
+
+            
 
             // 리스트로 아이템 정보 셋팅
             Item IronArmor = new Item("무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 0, 0, true, true);
@@ -37,11 +65,13 @@ namespace TextGame
 
             Item TraineeArmor = new Item("수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 0, 5, 0, 1000);
             inventory.Add(TraineeArmor);
-            Item SpartanArmor = new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 0, 15, 0, 3500);
-            inventory.Add(SpartanArmor);
             Item BronzeAxe = new Item("청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 5, 0, 0, 1500);
             inventory.Add(BronzeAxe);
-            Item SpartanSpear = new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7, 0, 0, 10);
+            Item BronzeArmor = new Item("청동 갑옷", "어디선가 사용됐던거 같은 갑옷입니다.", 0, 10, 0, 2500);
+            inventory.Add(BronzeArmor);
+            Item SpartanArmor = new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 0, 15, 0, 3500);
+            inventory.Add(SpartanArmor);
+            Item SpartanSpear = new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7, 0, 0, 5000);
             inventory.Add(SpartanSpear);
         }
 
@@ -81,9 +111,14 @@ namespace TextGame
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
 
-            //
-            player.DisplayInfo();
-            //
+            UpdatePlayerInfo();
+
+            Console.WriteLine($"Lv. {player.level}");
+            Console.WriteLine($"{player.name} ( {player.classType} )");
+            Console.WriteLine($"공격력 : {player.attack}");
+            Console.WriteLine($"방어력 : {player.defense}");
+            Console.WriteLine($"체력 : {player.health}");
+            Console.WriteLine($"Gold : {player.gold} G");
 
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -113,6 +148,9 @@ namespace TextGame
                 if(item.health != 0) { player.health += item.health; }
             }
 
+            player.SaveToFile(filePath);
+
+            player.LoadFromFile(filePath, player);
         }
 
         static void DisplayInventory()
@@ -176,9 +214,9 @@ namespace TextGame
                     Item result = inventory.itemList[input - 1];
                     result.bEquip = !(result.bEquip);
 
-                    ManageEquippedItems();
-
                     UpdatePlayerInfo();
+
+                    ManageEquippedItems();
                     break;
             }
 
@@ -229,16 +267,41 @@ namespace TextGame
             this.gold = gold;
         }
 
-        public void DisplayInfo()
-        {
-            Console.WriteLine($"Lv. {level}");
-            Console.WriteLine($"{name} ( {classType} )");
-            Console.WriteLine($"공격력 : {attack}");
-            Console.WriteLine($"방어력 : {defense}");
-            Console.WriteLine($"체력 : {health}");
-            Console.WriteLine($"Gold : {gold} G");
-        }
+       public void SaveToFile(string fileName) 
+       { 
 
+            using (StreamWriter writer = new StreamWriter(fileName))
+            {
+                writer.WriteLine(level);
+                writer.WriteLine(name);
+                writer.WriteLine(classType);
+                writer.WriteLine(attack);
+                writer.WriteLine(defense);
+                writer.WriteLine(health);
+                writer.WriteLine(gold);
+            }
+
+       }
+
+
+
+        public void LoadFromFile(string fileName, Player player)
+        {
+
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                player.level = int.Parse(reader.ReadLine());
+                player.name = reader.ReadLine();
+                player.classType = reader.ReadLine();
+                player.attack = float.Parse(reader.ReadLine());
+                player.defense = float.Parse(reader.ReadLine());
+                player.health = float.Parse(reader.ReadLine());
+                player.gold = long.Parse(reader.ReadLine());
+            }
+
+
+            //return player;
+        }
 
     }
 
