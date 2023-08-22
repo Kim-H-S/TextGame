@@ -58,9 +58,9 @@ namespace TextGame
             
 
             // 리스트로 아이템 정보 셋팅
-            Item IronArmor = new Item("무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 0, 0, true, true);
+            Item IronArmor = new Item("무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 0, 1800, true, true);
             inventory.Add(IronArmor);
-            Item WornSword = new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 0, 0, true, true);
+            Item WornSword = new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 0, 450, true, true);
             inventory.Add(WornSword);
 
             UpdatePlayerInfo();
@@ -258,11 +258,12 @@ namespace TextGame
 
             Console.WriteLine();
             Console.WriteLine("1. 아이템 구매");
+            Console.WriteLine("2. 아이템 판매");
             Console.WriteLine("0. 나가기");
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
 
-            int input = CheckValidInput(0, 1);
+            int input = CheckValidInput(0, 2);
             switch (input)
             {
                 case 0:
@@ -270,7 +271,11 @@ namespace TextGame
                     break;
 
                 case 1:
-                    Shop();
+                    ShopBuying();
+                    break;
+
+                case 2:
+                    ShopSelling();
                     break;
             }
         }
@@ -278,7 +283,7 @@ namespace TextGame
         /// <summary>
         /// 상점에서 구매한다.
         /// </summary>
-        static void Shop()
+        static void ShopBuying()
         {
             Console.Clear();
 
@@ -294,7 +299,7 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
-            inventory.Shop();
+            inventory.ShopBuying();
 
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -344,13 +349,67 @@ namespace TextGame
 
                     //UpdatePlayerInfo();
 
-                    Shop();
+                    ShopBuying();
                     break;
             }
         }
         
+        /// <summary>
+        /// 상점에서 판매한다.
+        /// </summary>
+        static void ShopSelling()
+        {
+            Console.Clear();
 
-        
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("상점 - 아이템 판매");
+            Console.ResetColor();
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+
+            Console.WriteLine($"{player.gold} G");
+
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
+
+            inventory.ShopSelling();
+
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">> ");
+
+            int input = CheckValidInput(0, 10);
+            switch (input)
+            {
+                case 0:
+                    break;
+
+                default:
+                    Item result = inventory.itemList[input - 1];
+
+                    if (result.bEquip)
+                    {
+                        result.bEquip = false;
+                    }
+
+                    if(result.bBuy)
+                    {
+                        // 판매가 = gold * 0.85
+                        player.gold += result.gold * 0.85;
+
+                        result.bBuy = false;
+                        Thread.Sleep(1000);
+                    }
+
+                   
+                    ShopSelling();
+                    break;
+            }
+
+
+        }
 
 
         static public int CheckValidInput(int min, int max)
@@ -384,7 +443,7 @@ namespace TextGame
         public float attack { get; set; }
         public float defense { get; set; }
         public float health { get; set; }
-        public long gold { get; set; }
+        public double gold { get; set; }
 
         public Player(int level, string name, string classType, float attack, float defense, float health, long gold)
         {
@@ -444,7 +503,7 @@ namespace TextGame
         public int defense;
         public int health;
 
-        public long gold;
+        public double gold;
 
         // 구입 유무
         public bool bBuy;
@@ -504,7 +563,7 @@ namespace TextGame
         }
 
         
-
+        
         public void ManageEquippedItems()
         {
             List<Item> itemNameLongSort_AND_bBuyTrue_List = itemList
@@ -554,7 +613,10 @@ namespace TextGame
             }
         }
 
-        public void Shop()
+        /// <summary>
+        /// 상점에서 구매한다.
+        /// </summary>
+        public void ShopBuying()
         {
             int itemCount = 1;
 
@@ -579,6 +641,43 @@ namespace TextGame
                 itemCount++;
             }
 
+        }
+
+        /// <summary>
+        /// 상점에서 판매한다.
+        /// </summary>
+
+        public void ShopSelling() 
+        {
+            List<Item> bBuyTrueItems = itemList
+    .Where(item => item.bBuy == true) // bBuy가 true인 아이템만 필터링
+    .ToList();
+
+            int itemCount = 1;
+
+            foreach (var item in bBuyTrueItems)
+            {
+                //if (!item.bBuy) return;
+
+                Console.Write("- ");
+                Console.Write($"{itemCount} ");
+
+                if (item.bEquip) { Console.Write("[E]"); }
+
+                Console.Write($"{item.name} | ");
+
+                if (item.attack > 0) { Console.Write($"공격력 +{item.attack} "); }
+                if (item.defense > 0) { Console.Write($"방어력 +{item.defense} "); }
+                if (item.health > 0) { Console.Write($"체력 +{item.health} "); }
+
+                Console.Write($" | {item.description}");
+
+                // 판매가 = gold * 0.85
+                //Console.WriteLine($" | {item.gold.ToString("F")} G");
+                Console.WriteLine($" | {(item.gold * 0.85).ToString("F")} G");
+
+                itemCount++;
+            }
         }
 
     }
