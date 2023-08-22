@@ -151,13 +151,9 @@ namespace TextGame
             Console.Write(">> ");
 
             int input = CheckValidInput(0, inventory.itemList.Count);
-            
-            //switch (input)
-            //{
-            //    case 0:
-            //        DisplayInventory();
-            //        break;
-            //}
+
+            // 1부터 접근하면 -1을 하여 0부터 접근
+            var result = inventory.itemList[input - 1];
         }
 
 
@@ -224,7 +220,7 @@ namespace TextGame
         // 구입 유무
         public bool bBuy;
         // 장착 유무
-        public bool isEquip;
+        public bool bEquip;
 
         public Item(string name, string description, int attack, int defense, int health, long gold, bool isBuy = false, bool isEquip = false)
         {
@@ -235,7 +231,7 @@ namespace TextGame
             this.health = health;
             this.gold = gold;
             this.bBuy = isBuy;
-            this.isEquip = isEquip;
+            this.bEquip = isEquip;
         }
     }
 
@@ -264,7 +260,7 @@ namespace TextGame
             {
                 Console.Write("- ");
 
-                if (item.isEquip) { Console.Write("[E]"); }
+                if (item.bEquip) { Console.Write("[E]"); }
 
                 Console.Write($"{item.name} | ");
 
@@ -286,7 +282,7 @@ namespace TextGame
                 Console.Write("- ");
                 Console.Write($"{itemCount} ");
 
-                if (item.isEquip) { Console.Write("[E]"); }
+                if (item.bEquip) { Console.Write("[E]"); }
 
                 Console.Write($"{item.name} | ");
 
