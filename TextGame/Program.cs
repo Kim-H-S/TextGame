@@ -391,6 +391,7 @@ namespace TextGame
             switch (input)
             {
                 case 0:
+                    DisplayShop();
                     break;
 
                 default:
