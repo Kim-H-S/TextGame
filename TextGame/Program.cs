@@ -61,10 +61,12 @@ namespace TextGame
             // 리스트로 아이템 정보 셋팅
             Item IronArmor = new Item("무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 0, 1800, true, true); IronArmor.bArmor = true;
             inventory.Add(IronArmor);
-            player.bEquipArmor = true;
+            ////player.EquipArmor(IronArmor);
+            //player.bEquipArmor = true;
             Item WornSword = new Item("낡은 검", "쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 0, 450, true, true); WornSword.bWeapon = true;
             inventory.Add(WornSword);
-            player.bEquipWeapon = true;
+            ////player.EquipWeapon(WornSword);
+            //player.bEquipWeapon = true;
 
             UpdatePlayerInfo();
 
@@ -194,13 +196,13 @@ namespace TextGame
                     break;
 
                 case 1:
-                    DIsplayEquippedInventory();
+                    DisplayEquippedInventory();
                     break;
             }
 
         }
 
-        static void DIsplayEquippedInventory()
+        static void DisplayEquippedInventory()
         {
             Console.Clear();
 
@@ -211,7 +213,7 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
-            inventory.DIsplayEquippedInventory();
+            inventory.DisplayEquippedInventory();
 
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -229,15 +231,54 @@ namespace TextGame
 
                 default:
                     Item result = inventory.itemList[input - 1];
-                    result.bEquip = !(result.bEquip);
 
-                    //equipment ^= EquipmentFlags.Weapon;
-                    //if ( (equipment & EquipmentFlags.Weapon) != 0 ) Console.WriteLine("Weapon is equipped");
-                    //else Console.WriteLine("Weapon is not equipped");
+
+
+                    foreach (var item in inventory.itemList)
+                    {
+
+
+                        if (result.bWeapon)
+                        {
+
+                            if (item.bWeapon && item.bEquip)
+                            {
+                                item.bEquip = false;
+                                result.bEquip = true;
+                            }
+
+                        }
+                        else if (result.bArmor)
+                        {
+
+                            if (item.bArmor && item.bEquip)
+                            {
+                                item.bEquip = false;
+                                result.bEquip = true;
+                            }
+
+                        }
+                        else
+                        {
+                            result.bEquip = !(result.bEquip);
+                        }
+
+                        
+                    }
+
+
+                    
+
+                    
+
+                    
+
+                    
+                    
 
                     UpdatePlayerInfo();
 
-                    DIsplayEquippedInventory();
+                    DisplayEquippedInventory();
                     break;
             }
 
@@ -331,7 +372,7 @@ namespace TextGame
 
                         //return;
                     }
-                    else if(player.gold > result.gold)
+                    else if(player.gold >= result.gold)
                     {
                         Console.WriteLine("구매를 완료했습니다.");
 
@@ -453,8 +494,11 @@ namespace TextGame
         public float health { get; set; }
         public double gold { get; set; }
 
-        public bool bEquipWeapon = false;
-        public bool bEquipArmor = false;
+        //public bool bEquipWeapon = false;
+        //public bool bEquipArmor = false;
+
+        public Item EquippedWeapon;
+        public Item EquippedArmor;
 
         public Player(int level, string name, string classType, float attack, float defense, float health, long gold)
         {
@@ -467,8 +511,29 @@ namespace TextGame
             this.gold = gold;
         }
 
-       public void SaveToFile(string fileName) 
-       { 
+        //public void EquipWeapon(Item item)
+        //{
+
+        //    if (!item.bWeapon) return;
+
+        //    EquippedWeapon.bEquip = false;
+        //    item.bEquip = true;
+
+        //    EquippedWeapon = item;
+        //}
+
+        //public void EquipArmor(Item item)
+        //{
+        //    if (!item.bArmor) return;
+
+        //    EquippedArmor.bEquip = false;
+        //    item.bEquip = true;
+
+        //    EquippedArmor = item;
+        //}
+
+        public void SaveToFile(string fileName) 
+        { 
 
             using (StreamWriter writer = new StreamWriter(fileName))
             {
@@ -481,7 +546,7 @@ namespace TextGame
                 writer.WriteLine(gold);
             }
 
-       }
+        }
 
 
 
@@ -519,7 +584,7 @@ namespace TextGame
         // 구입 유무
         public bool bBuy;
         // 장착 유무
-        public bool bEquip;
+        public bool bEquip = false;
 
         public bool bWeapon = false;
         public bool bArmor = false;
@@ -578,7 +643,7 @@ namespace TextGame
 
         
         
-        public void DIsplayEquippedInventory()
+        public void DisplayEquippedInventory()
         {
             List<Item> itemNameLongSort_AND_bBuyTrue_List = itemList
     .Where(item => item.bBuy) // bBuy가 true인 아이템만 필터링
