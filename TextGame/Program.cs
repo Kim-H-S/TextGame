@@ -213,7 +213,7 @@ namespace TextGame
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
-            inventory.DisplayEquippedInventory();
+            List<Item> itemList = inventory.DisplayEquippedInventory();
 
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -230,50 +230,44 @@ namespace TextGame
                     break;
 
                 default:
-                    Item result = inventory.itemList[input - 1];
+                    //Item result = inventory.itemList[input - 1];
+                    Item inputItem = itemList[input - 1];
 
-
-
-                    foreach (var item in inventory.itemList)
+                    if (inputItem.bEquip)
                     {
-
-
-                        if (result.bWeapon)
+                        inputItem.bEquip = !(inputItem.bEquip);
+                    }
+                    else
+                    {
+                        foreach (var item in itemList)
                         {
 
-                            if (item.bWeapon && item.bEquip)
+                            if (item.bEquip)
                             {
-                                item.bEquip = false;
-                                result.bEquip = true;
+
+                                if (inputItem.bWeapon && item.bWeapon)
+                                {
+                                    item.bEquip = false;
+                                    inputItem.bEquip = true;
+                                }
+                                else if (inputItem.bArmor && item.bArmor)
+                                {
+                                    item.bEquip = false;
+                                    inputItem.bEquip = true;
+                                }
+                                else
+                                {
+                                    inputItem.bEquip = !(inputItem.bEquip);
+                                }
+
                             }
-
-                        }
-                        else if (result.bArmor)
-                        {
-
-                            if (item.bArmor && item.bEquip)
-                            {
-                                item.bEquip = false;
-                                result.bEquip = true;
-                            }
-
-                        }
-                        else
-                        {
-                            result.bEquip = !(result.bEquip);
+                            
+                            
                         }
 
                         
                     }
 
-
-                    
-
-                    
-
-                    
-
-                    
                     
 
                     UpdatePlayerInfo();
@@ -643,7 +637,8 @@ namespace TextGame
 
         
         
-        public void DisplayEquippedInventory()
+        //public void DisplayEquippedInventory()
+        public List<Item> DisplayEquippedInventory()
         {
             List<Item> itemNameLongSort_AND_bBuyTrue_List = itemList
     .Where(item => item.bBuy) // bBuy가 true인 아이템만 필터링
@@ -670,6 +665,7 @@ namespace TextGame
                 itemCount++;
             }
 
+            return itemNameLongSort_AND_bBuyTrue_List;
         }
 
         public void DisplayShop()
